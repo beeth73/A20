@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Tradition</title>
+</head>
+<body>
+    <h1>Add a New Tradition</h1>
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Event Name -->
+        <label for="name">Event Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <!-- Event Day (User selects a day) -->
+        <label for="event-day">Event Day:</label>
+        <input type="date" id="event-day" name="event_day" required>
+
+        <!-- Event Description -->
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
+
+        <button type="submit">Add Tradition</button>
+    </form>
+    
+    <a href="/">Back to Home</a>
+</body>
+</html>

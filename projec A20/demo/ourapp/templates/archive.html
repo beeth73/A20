@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tradition Management</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Link to a shared stylesheet -->
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'archive' %}">Archive</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="add-tradition">
+            <h1>Add a New Tradition</h1>
+            <form method="post">
+                {% csrf_token %}
+                
+                <!-- Event Name -->
+                <label for="name">Event Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <!-- Event Day -->
+                <label for="event-day">Event Day:</label>
+                <input type="date" id="event-day" name="event_day" required>
+
+                <!-- Event Description -->
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4"></textarea>
+
+                <button type="submit">Add Tradition</button>
+            </form>
+
+            {% if error %}
+                <p class="error-message">{{ error }}</p>
+            {% endif %}
+        </section>
+
+        <hr>
+
+        <section class="tradition-archive">
+            <h1>Archive of Traditions</h1>
+
+            <!-- Display the list of traditions -->
+            {% if traditions %}
+                <ul>
+                    {% for tradition in traditions %}
+                        <li>
+                            <strong>{{ tradition.name }}</strong><br>
+                            <em>Date Added:</em> {{ tradition.date_added|date:"Y-m-d H:i" }}<br>
+                            <em>Event Day:</em> {{ tradition.event_day }}<br>
+                            <p>{{ tradition.description }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No traditions have been added yet.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <a href="{% url 'home' %}">Back to Home</a>
+    </footer>
+</body>
+</html>

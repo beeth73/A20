@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Title Bar -->
+<header class="title-bar">
+    <div class="logo">
+        <h2>Cultura</h2>
+    </div>
+    <nav class="nav-links">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'login' %}"">Login</a>
+    </nav>
+</header>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Include CSS if applicable -->
+</head>
+
+<body>
+    <h1>Welcome to the Cultural Heritage Hub!</h1>
+
+    <!-- Year Navigation -->
+    <div class="year-navigation">
+        <a href="?year=2024" class="year-btn">2024</a>
+        <a href="?year=2025" class="year-btn">2025</a>
+        <a href="?year=2026" class="year-btn">2026</a>
+    </div>
+
+    <!-- Full Year Calendar -->
+    <div class="calendar">
+        <!-- Calendar Header -->
+        <div class="calendar-header">
+            <a href="?year={{ current_year }}&month={{ prev_month }}" class="prev-month">Prev</a>
+            <span class="month-name">{{ calendar_data.month_name }} {{ current_year }}</span>
+            <a href="?year={{ current_year }}&month={{ next_month }}" class="next-month">Next</a>
+        </div>
+
+        <!-- Calendar Days -->
+        <div class="calendar-days">
+            {% for day in calendar_data.days %}
+            <div class="day" data-day="{{ day }}" data-month="{{ calendar_data.month }}">
+                {{ day }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Buttons to Other Functions -->
+    <div class="button-navigation">
+        <a href="{% url 'add_entry' %}"><button>Add Tradition</button></a>
+        <a href="{% url 'archive' %}"><button>View Archive</button></a>
+        
+    </div>
+
+    <!-- Add Tradition Form -->
+    <div id="tradition-form" class="tradition-form">
+        <h3>Add Tradition for <span id="selected-date"></span></h3>
+        <form action="/add/" method="POST">
+            {% csrf_token %}
+            <label for="tradition-name">Tradition Name:</label>
+            <input type="text" id="tradition-name" name="tradition_name" required>
+
+            <label for="tradition-category">Category:</label>
+            <select id="tradition-category" name="tradition_category" required>
+                <option value="Art">Art</option>
+                <option value="Food">Food</option>
+                <option value="Festival">Festival</option>
+                <!-- Add other categories -->
+            </select>
+
+            <label for="tradition-description">Description:</label>
+            <textarea id="tradition-description" name="tradition_description" rows="4" required></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+        <button id="close-form">Close</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const dayBlocks = document.querySelectorAll('.day');
+            const traditionForm = document.getElementById('tradition-form');
+            const closeFormBtn = document.getElementById('close-form');
+            const selectedDate = document.getElementById('selected-date');
+
+            dayBlocks.forEach(day => {
+                day.addEventListener('click', function() {
+                    const dayNumber = this.textContent;
+                    const monthIndex = this.getAttribute('data-month');
+                    selectedDate.textContent = `${monthIndex}/${dayNumber}`;
+                    traditionForm.style.display = 'block';
+                });
+            });
+
+            closeFormBtn.addEventListener('click', function() {
+                traditionForm.style.display = 'none';
+            });
+        });
+    </script>
+
+ <!-- Footer -->
+<footer class="footer">
+ <p>&copy; 2024 Cultura. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
